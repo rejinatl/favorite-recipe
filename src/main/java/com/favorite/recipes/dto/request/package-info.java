@@ -1,0 +1,1 @@
+package com.favorite.recipes.dto.request;
