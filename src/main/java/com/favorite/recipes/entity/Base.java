@@ -26,7 +26,7 @@ public class Base implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date")
+    @Column(name = "created_date", updatable = false)
     @CreationTimestamp
     public LocalDateTime createdDate;
 

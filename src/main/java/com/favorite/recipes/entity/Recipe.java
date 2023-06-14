@@ -1,21 +1,18 @@
 package com.favorite.recipes.entity;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.UUID;
-
-import org.hibernate.annotations.NaturalId;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -31,36 +28,28 @@ public class Recipe extends Base {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, nullable = false)
-    private Long id;
-
-    @NaturalId
-    @Column(name = "uuid", unique = true, nullable = false, columnDefinition = "uuid")
-    @GeneratedValue
-    private UUID uuid;
-
-    @Column(name = "name", columnDefinition = "varchar(250)")
-    @NotBlank(message = "{recipe.name.error}")
+    @Column(name = "name")
+    @NotBlank(message = "{recipe.name.notempty}")
     @Size(min = 1, max = 255, message = "{recipe.name.size.error}")
     private String name;
 
-    @Column(name = "description", columnDefinition = "varchar(250)")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "instruction", columnDefinition = "TEXT")
+    @Column(name = "instruction")
     private String instruction;
 
-    @Column(name = "servings", columnDefinition = "integer")
+    @Column(name = "servings")
     private Integer servings;
 
-    @Column(name = "is_vegeterian", columnDefinition = "varchar(250) default 'Yes'")
-    private String isVegeterian;
+    @Column(name = "is_vegetarian")
+    private String isVegetarian ;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "recipe_ingredient", joinColumns = { @JoinColumn(name = "recipe_id") }, inverseJoinColumns = {
             @JoinColumn(name = "ingredient_name") })
-    private Set<Ingredient> ingredients;
+    @OrderBy("UPPER(name) ASC")
+    private Set<Ingredient> ingredients = new HashSet<>();
 
     public void addIngredient(Ingredient ingredient) {
 
@@ -74,8 +63,6 @@ public class Recipe extends Base {
         Optional<Ingredient> findIngredient = Optional.ofNullable(this.ingredients.stream().filter(i -> i.getName().equals(ingredient)).findFirst())
         .orElse(null);
 
-        /*Ingredient findIngredient = this.ingredients.stream().filter(i -> i.getName().equals(ingredient)).findFirst()
-                .orElse(null);*/
         if (findIngredient.isPresent()) {
 
            this.ingredients.remove(findIngredient.get());
