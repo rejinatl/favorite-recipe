@@ -1,18 +1,8 @@
 package com.favorite.recipes.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -23,9 +13,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,7 +66,76 @@ public class RecipeControllerTests {
         
     }
     
+    @Test
+    @DisplayName("Update recipe")
+    public void update_Recipe_and_Return_OK() throws Exception {
+        
+        Recipe recipe = getDummyRecipe();
+        
+        Recipe newRecipe = new Recipe();
+        newRecipe.setName("Chicken fry");
+        newRecipe.setDescription("Chicken fry");
+        
+        Set<Ingredient> ingredients = new HashSet<>();
+        Ingredient in1 = getIngredient("Chicken");
+        Ingredient in2 = getIngredient("Oil");
+        ingredients.addAll(Arrays.asList(in1,in2));
+        newRecipe.setIngredients(ingredients);
+        
+        when(recipeService.updateRecipe(anyString(), any(Recipe.class))).thenReturn(newRecipe);
+        ResultActions response = mockMvc.perform(put("/recipe/{id}", "28c004e2-f2e7-4a48-90a9-cad60255fcad")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(recipe)));
+        
+        response.andExpect(status().isCreated()).andExpect(jsonPath("$.name").value(newRecipe.getName()))
+        .andExpect(jsonPath("$.description").value(newRecipe.getDescription()));
+        
+    }
+    
+    @Test
+    @DisplayName("Delete a recipe return_OK")
+    public void deleteRecipe_Return_OK() throws Exception {
+        
+        when(recipeService.deleteRecipe(any())).thenReturn(true);
 
+        ResultActions response = mockMvc.perform(delete("/recipe/{id}", "28c004e2-f2e7-4a48-90a9-cad60255fcad"));
+
+        response.andExpect(status().isOk());
+
+    }
+    
+    @Test
+    @DisplayName("Delete a recipe return_NO_CONTENT")
+    public void deleteRecipe_Return_NO_CONTENT() throws Exception {
+        
+        when(recipeService.deleteRecipe(any())).thenReturn(false);
+
+        ResultActions response = mockMvc.perform(delete("/recipe/{id}", "28c004e2-f2e7-4a48-90a9-cad60255fcad"));
+        response.andExpect(status().isNoContent());
+
+    }
+    
+    @DisplayName("Get recipes")
+    @Test
+    public void getRecipes_Return_OK() throws Exception {
+        
+        List<Recipe> recipes = new ArrayList<>();
+        
+        Recipe recipe1 = getDummyRecipe();
+        Recipe recipe2 = getDummyRecipe2();
+        recipes.addAll(Arrays.asList(recipe1,recipe2));
+        
+        when(recipeService.getRecipe(anyString(),anyInt(),anyString(),anyString(),anyString())).thenReturn(recipes);
+        ResultActions response = mockMvc.perform(get("/recipe")
+                .param("isVegetarian", "Yes")
+                .param("servings", "10")
+                .param("includeIngredient", "chicken")
+                .param("excludeIngredient", "oil")
+                .param("instructionContains", ""));
+        
+        response.andExpect(status().isOk()).andDo(print());
+        
+    }
     
     private Recipe getDummyRecipe() {
         
@@ -96,9 +156,27 @@ public class RecipeControllerTests {
         recipe.setIngredients(ingredients);
         
         return recipe;
+    }
+    
+ private Recipe getDummyRecipe2() {
         
+        Recipe recipe =new Recipe();
+        Set<Ingredient> ingredients = new HashSet<>();
         
+        Ingredient in1 = getIngredient("Lamb curry");
+        Ingredient in2 = getIngredient("OIL");
+        Ingredient in3 = getIngredient("Chilli");
+        Ingredient in4 = getIngredient("Potatoes");
+        ingredients.addAll(Arrays.asList(in1,in2,in3,in4));
         
+        recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fddc");
+        recipe.setName("Lamb curry");
+        recipe.setDescription("Lamb curry");
+        recipe.setInstruction("Lamb curry");
+        recipe.setServings(10);
+        recipe.setIngredients(ingredients);
+        
+        return recipe;
     }
     
     private Ingredient getIngredient(String name) {

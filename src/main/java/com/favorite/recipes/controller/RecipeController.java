@@ -70,7 +70,7 @@ public interface RecipeController {
     /** Update recipe */
     @Operation(summary = "${recipe.controller.update.recipe}", description = "${recipe.controller.update.recipe.desc}")
     @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "${recipe.controller.successful.operation}", content = {
+            @ApiResponse(responseCode = "201", description = "${recipe.controller.successful.operation}", content = {
                     @Content(schema = @Schema(implementation = Recipe.class), mediaType = "application/json") }),
             @ApiResponse(responseCode = "400", description = "${recipe.controller.mandatory.fields}", content = {
                     @Content(schema = @Schema()) }),

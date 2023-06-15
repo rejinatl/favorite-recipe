@@ -1,7 +1,6 @@
 package com.favorite.recipes.entity;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -9,8 +8,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
@@ -37,7 +34,6 @@ public class Recipe extends Base {
     @Schema(hidden = true)
     private String id;
     
-    //@Id
     @Column(name = "name")
     @NotBlank(message = "{recipe.name.notempty}")
     @Size(min = 1, max = 255, message = "{recipe.name.size.error}")
@@ -61,7 +57,7 @@ public class Recipe extends Base {
     @OrderBy("UPPER(name) ASC")
     private Set<Ingredient> ingredients = new HashSet<>();
 
-    public void addIngredient(Ingredient ingredient) {
+    /*public void addIngredient(Ingredient ingredient) {
 
         this.ingredients.add(ingredient);
         ingredient.getRecipes().add(this);
@@ -79,6 +75,6 @@ public class Recipe extends Base {
            findIngredient.get().getRecipes().remove(this);
 
         }
-    }
+    }*/
 
 }

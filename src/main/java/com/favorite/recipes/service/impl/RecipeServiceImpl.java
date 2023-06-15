@@ -3,6 +3,8 @@ package com.favorite.recipes.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.favorite.recipes.entity.Recipe;
@@ -59,6 +61,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Cacheable(cacheNames = "favorite_recipes")
     public List<Recipe> getRecipe(String isVegetarian, Integer servings, String includeIngredient,
             String excludeIngredient, String instructionContains) {
 
@@ -76,6 +79,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @CacheEvict(cacheNames="favorite_recipes", allEntries = true)
     public Recipe updateRecipe(String id, Recipe recipe) {
 
         try {
@@ -97,7 +101,9 @@ public class RecipeServiceImpl implements RecipeService {
         }
     }
 
+    
     @Override
+    @CacheEvict(cacheNames="favorite_recipes", allEntries = true)
     public Boolean deleteRecipe(String id) {
 
         try {

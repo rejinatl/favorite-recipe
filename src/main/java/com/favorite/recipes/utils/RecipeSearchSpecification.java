@@ -30,7 +30,7 @@ public class RecipeSearchSpecification {
 
             if (StringUtils.isNotBlank(isVegetarian)) {
 
-                predicates.add(criteriaBuilder.equal(root.get("isVegetarian"), isVegetarian));
+                predicates.add(criteriaBuilder.equal(criteriaBuilder.upper(root.get("isVegetarian")), isVegetarian.toUpperCase()));
             }
 
             if (servings >= 0) {
@@ -39,16 +39,14 @@ public class RecipeSearchSpecification {
             }
             if (StringUtils.isNotBlank(instructionContains)) {
 
-                predicates.add(criteriaBuilder.like(root.get("instruction"), "%" + instructionContains + "%"));
+                predicates.add(criteriaBuilder.like( criteriaBuilder.upper(root.get("instruction")), "%" + instructionContains.toUpperCase() + "%"));
             }
 
             if (StringUtils.isNotBlank(includeIngredient)) {
-
+                
                 Join<Recipe, Ingredient> join = root.join("ingredients", JoinType.INNER);
-
                 List<String> includeIngredientList = new ArrayList<>();
                 includeIngredientList.add(includeIngredient);
-
                 predicates.add(join.get("name").in(includeIngredientList));
 
             }
@@ -58,7 +56,7 @@ public class RecipeSearchSpecification {
                 Root<Recipe> subqueryRoot = subquery.correlate(root);
                 Join<Recipe, Ingredient> ingredientJoin = subqueryRoot.join("ingredients");
                 subquery.select(ingredientJoin)
-                        .where(criteriaBuilder.equal(ingredientJoin.get("name"), excludeIngredient));
+                        .where(criteriaBuilder.equal( criteriaBuilder.upper(ingredientJoin.get("name")), excludeIngredient.toUpperCase()));
 
                 predicates.add(criteriaBuilder.not(criteriaBuilder.exists(subquery)));
             }
