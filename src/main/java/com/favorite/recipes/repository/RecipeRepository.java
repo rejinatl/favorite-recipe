@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import com.favorite.recipes.entity.Recipe;
 
 @Repository
-public interface RecipeRepository extends JpaRepository<Recipe, Long>, JpaSpecificationExecutor<Recipe> {
-
+public interface RecipeRepository extends JpaRepository<Recipe, String>, JpaSpecificationExecutor<Recipe> {
+    
 }

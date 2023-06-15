@@ -9,5 +9,10 @@ class FavoriteRecipeApplicationTests {
 	@Test
 	void contextLoads() {
 	}
+	
+	@Test
+    public void applicationStarts() {
+	    FavoriteRecipeApplication.main(new String[] {});
+    }
 
 }

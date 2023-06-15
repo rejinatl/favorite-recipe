@@ -8,21 +8,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.favorite.recipes.controller.RecipeController;
-import com.favorite.recipes.dto.request.RecipeSearchRequest;
 import com.favorite.recipes.entity.Recipe;
 import com.favorite.recipes.exception.ErrorSavingRecordException;
 import com.favorite.recipes.exception.ResourceNotFoundException;
 import com.favorite.recipes.service.RecipeService;
 
-import lombok.extern.slf4j.Slf4j;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @RestController
-@Slf4j
 public class RecipeControllerImpl implements RecipeController {
     
     private RecipeService recipeService;
     
     public RecipeService getRecipeService() {
+        
         return recipeService;
     }
     
@@ -32,6 +32,7 @@ public class RecipeControllerImpl implements RecipeController {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<Recipe> createRecipe(Recipe recipe) {
        
         try {
@@ -60,6 +61,44 @@ public class RecipeControllerImpl implements RecipeController {
         } catch (ResourceNotFoundException e) {
             
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<Recipe> updateRecipe(String id, @Valid Recipe recipe) {
+        
+        try {
+            
+            Recipe updatedRecipe = recipeService.updateRecipe(id, recipe);
+            
+            return new ResponseEntity<>(updatedRecipe, HttpStatus.CREATED);
+            
+        } catch (ResourceNotFoundException e) {
+            
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            
+        }
+    }
+
+    @Override
+    public ResponseEntity<HttpStatus> deleteRecipe(String id) {
+        
+        try {
+            
+            Boolean deleteStatus = recipeService.deleteRecipe(id);
+            
+            if(deleteStatus) {
+                
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            
+        } catch (ResourceNotFoundException e) {
+            
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
