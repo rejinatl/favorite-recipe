@@ -44,6 +44,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @CacheEvict(cacheNames="favorite_recipes", allEntries = true)
     public Recipe createRecipe(Recipe recipe) {
 
         try {

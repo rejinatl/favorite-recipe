@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -16,12 +17,14 @@ import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.favorite.recipes.entity.Ingredient;
 import com.favorite.recipes.entity.Recipe;
 import com.favorite.recipes.repository.RecipeRepository;
+import com.favorite.recipes.utils.RecipeSearchSpecification;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
@@ -34,13 +37,34 @@ public class RecipeRepositoryTests {
 
     @Autowired
     TestEntityManager entityManager;
-
+    
+    @MockBean
+    RecipeSearchSpecification recipeSearchSpecification;
+    
     @BeforeEach
     void setUp() {
 
         Recipe recipe = getDummyRecipe();
         entityManager.persist(recipe);
 
+    }
+    
+    @DisplayName("findAll")
+    @Test
+    public void findAll_With_Search_Criteria() throws Exception {
+        
+        String isVegetarian = "no";
+        Integer servings = 10;
+        String includeIngredient = "Chicken";
+        String excludeIngredient = "butter";
+        String instructionContains = "instruction";
+        
+        List<Recipe> filterResult = recipeRepository.findAll(recipeSearchSpecification.searchRecipe(isVegetarian, 
+                servings, includeIngredient, 
+                excludeIngredient, instructionContains));
+        
+        assertEquals(1, filterResult.size());
+        
     }
 
     @DisplayName("Recipe Repository - Find recipe by ID")
@@ -50,7 +74,7 @@ public class RecipeRepositoryTests {
         Recipe recipe = recipeRepository.findById("28c004e2-f2e7-4a48-90a9-cad60255fcad").get();
         assertEquals("chicken curry", recipe.getName());
     }
-
+    
     @DisplayName("Recipe Repository - findById")
     @Test
     public void findById_Return_Recipe_Ok() {
@@ -89,6 +113,7 @@ private Recipe getDummyRecipe() {
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fcad");
         recipe.setName("chicken curry");
+        recipe.setIsVegetarian("no");
         recipe.setDescription("description");
         recipe.setInstruction("instruction");
         recipe.setServings(100);
@@ -110,6 +135,7 @@ private Recipe getDummyRecipe2() {
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fddc");
         recipe.setName("Lamb curry");
+        recipe.setIsVegetarian("no");
         recipe.setDescription("Lamb curry");
         recipe.setInstruction("Lamb curry");
         recipe.setServings(10);

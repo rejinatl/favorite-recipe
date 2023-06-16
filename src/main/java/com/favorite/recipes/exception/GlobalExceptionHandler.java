@@ -31,13 +31,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
     
-    @ExceptionHandler(ConflictErrorRecordException.class)
-    ProblemDetail handleConflictErrorRecordException(ConflictErrorRecordException e) {
-        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
-        problemDetail.setTitle(e.getMessage());
-        problemDetail.setProperty(ApplicationConstants.STR_TIMESTAMP, Instant.now());
-        return problemDetail;
-    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

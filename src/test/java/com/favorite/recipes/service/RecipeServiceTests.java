@@ -25,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.jpa.domain.Specification;
 
 import com.favorite.recipes.entity.Ingredient;
 import com.favorite.recipes.entity.Recipe;
@@ -46,7 +47,7 @@ public class RecipeServiceTests {
     
     @Mock
     private RecipeSearchSpecification recipeSearchSpecification;
-    
+
     @DisplayName("Create Recipe")
     @Test
     public void createRecipe_Return_Recipe() throws Exception {
@@ -68,9 +69,9 @@ public class RecipeServiceTests {
         Recipe recipe1 = getDummyRecipe();
         Recipe recipe2 = getDummyRecipe2();
         recipes.addAll(Arrays.asList(recipe1,recipe2));
-        when(recipeRepository.findAll()).thenReturn(recipes);
+        when(recipeRepository.findAll(any(Specification.class))).thenReturn(recipes);
 
-        List<Recipe> recipesFromDB = recipeService.getRecipe("yes", 10,"butter", "","");
+        List<Recipe> recipesFromDB = recipeService.getRecipe("no", 10,"chicken", "butter","instruction");
 
         assertThat(recipesFromDB).isNotNull();
         
@@ -171,6 +172,7 @@ public class RecipeServiceTests {
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fcad");
         recipe.setName("chicken curry");
+        recipe.setIsVegetarian("no");
         recipe.setDescription("description");
         recipe.setInstruction("instruction");
         recipe.setServings(100);
@@ -192,6 +194,7 @@ public class RecipeServiceTests {
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fddc");
         recipe.setName("Lamb curry");
+        recipe.setIsVegetarian("no");
         recipe.setDescription("Lamb curry");
         recipe.setInstruction("Lamb curry");
         recipe.setServings(10);

@@ -12,6 +12,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedAttributeNode;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +27,9 @@ import lombok.ToString;
 @Entity
 @ToString
 @Table(name = "recipe")
+@NamedEntityGraph(name = "Recipe.ingredients",attributeNodes = {
+        @NamedAttributeNode("ingredients")
+})
 public class Recipe extends Base {
 
     private static final long serialVersionUID = 1L;
@@ -56,25 +61,5 @@ public class Recipe extends Base {
             @JoinColumn(name = "ingredient_name") })
     @OrderBy("UPPER(name) ASC")
     private Set<Ingredient> ingredients = new HashSet<>();
-
-    /*public void addIngredient(Ingredient ingredient) {
-
-        this.ingredients.add(ingredient);
-        ingredient.getRecipes().add(this);
-
-    }
-
-    public void removeIngredient(String ingredient) {
-        
-        Optional<Ingredient> findIngredient = Optional.ofNullable(this.ingredients.stream().filter(i -> i.getName().equals(ingredient)).findFirst())
-        .orElse(null);
-
-        if (findIngredient.isPresent()) {
-
-           this.ingredients.remove(findIngredient.get());
-           findIngredient.get().getRecipes().remove(this);
-
-        }
-    }*/
 
 }
