@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 
 import com.favorite.recipes.entity.Ingredient;
 import com.favorite.recipes.entity.Recipe;
@@ -25,6 +26,7 @@ import com.favorite.recipes.repository.RecipeRepository;
 @DataJpaTest
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
 @TestPropertySource(locations = "classpath:test.properties")
+@Sql(scripts = "classpath:schema-h2.sql")
 public class RecipeRepositoryTests {
 
     @Autowired
