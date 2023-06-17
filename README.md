@@ -15,7 +15,7 @@ User can also fiter their recipes based on the following criteria,
 For building and running the application you need:
 
 - [JDK 17 ](https://jdk.java.net/archive/)
-- [MySQL 8 ](https://www.postgresql.org/download/)
+- [MySQL 8 ](https://dev.mysql.com/downloads/mysql/)
 - [Maven 3 ](https://maven.apache.org)
 
 
