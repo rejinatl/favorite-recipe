@@ -31,6 +31,21 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
     
+    @ExceptionHandler(DuplicateRecordErrorException.class)
+    ProblemDetail duplicateRecordException(DuplicateRecordErrorException e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+        problemDetail.setTitle(e.getMessage());
+        problemDetail.setProperty(ApplicationConstants.STR_TIMESTAMP, Instant.now());
+        return problemDetail;
+    }
+    
+    @ExceptionHandler(Exception.class)
+    ProblemDetail genericException(Exception e) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        problemDetail.setTitle(e.getMessage());
+        problemDetail.setProperty(ApplicationConstants.STR_TIMESTAMP, Instant.now());
+        return problemDetail;
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

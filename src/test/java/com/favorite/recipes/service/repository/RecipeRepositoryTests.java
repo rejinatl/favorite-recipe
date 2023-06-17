@@ -82,7 +82,7 @@ public class RecipeRepositoryTests {
         Optional<Recipe> recipe = recipeRepository.findById("28c004e2-f2e7-4a48-90a9-cad60255fcad");
         assertThat(recipe).isNotNull();
     }
-
+    
     @DisplayName("Recipe repository - deleteById")
     @Test
     public void deleteById_Return_Nothing() {

@@ -1,6 +1,7 @@
 package com.favorite.recipes.controller.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.favorite.recipes.controller.RecipeController;
 import com.favorite.recipes.entity.Recipe;
+import com.favorite.recipes.exception.DuplicateRecordErrorException;
 import com.favorite.recipes.exception.ErrorSavingRecordException;
 import com.favorite.recipes.exception.ResourceNotFoundException;
 import com.favorite.recipes.service.RecipeService;
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -32,7 +33,6 @@ public class RecipeControllerImpl implements RecipeController {
     }
 
     @Override
-    @Transactional
     public ResponseEntity<Recipe> createRecipe(Recipe recipe) {
 
         try {
@@ -41,7 +41,12 @@ public class RecipeControllerImpl implements RecipeController {
 
             return new ResponseEntity<>(savedRecipe, HttpStatus.CREATED);
 
-        } catch (ErrorSavingRecordException e) {
+        } catch (DuplicateRecordErrorException e) {
+            
+            return new ResponseEntity<>(recipe, HttpStatus.CONFLICT);
+        }
+        
+        catch (ErrorSavingRecordException e) {
 
             return new ResponseEntity<>(recipe, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -63,9 +68,26 @@ public class RecipeControllerImpl implements RecipeController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
+    
+    @Override
+    public ResponseEntity<Recipe> getRecipeById(String id) {
+       
+        try {
+            
+            Optional<Recipe> getRecipeById = recipeService.getRecipeById(id);
+            if(getRecipeById.isPresent()) {
+                return new ResponseEntity<>(getRecipeById.get(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            
+        } catch (ResourceNotFoundException e) {
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 
     @Override
-    @Transactional
     public ResponseEntity<Recipe> updateRecipe(String id, @Valid Recipe recipe) {
 
         try {
@@ -74,9 +96,9 @@ public class RecipeControllerImpl implements RecipeController {
 
             return new ResponseEntity<>(updatedRecipe, HttpStatus.CREATED);
 
-        } catch (ResourceNotFoundException e) {
+        } catch (ErrorSavingRecordException e) {
 
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }

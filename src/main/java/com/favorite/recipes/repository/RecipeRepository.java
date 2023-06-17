@@ -1,6 +1,7 @@
 package com.favorite.recipes.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -16,4 +17,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, String>, JpaSpec
     
     @EntityGraph(type=EntityGraphType.FETCH, value="Recipe.ingredients")
     public List<Recipe> findAll(Specification<Recipe> recipeSpec);
+    
+    public Boolean existsByNameIgnoreCase(String recipeName);
+    
+    @EntityGraph(type=EntityGraphType.FETCH, value="Recipe.ingredients")
+    public Optional<Recipe> findById(String id);
 }

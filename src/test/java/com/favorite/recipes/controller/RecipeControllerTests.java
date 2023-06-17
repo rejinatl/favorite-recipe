@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
@@ -137,6 +138,27 @@ public class RecipeControllerTests {
         
     }
     
+    @DisplayName("get recipe by id")
+    @Test
+    public void getRecipeById_Return_OK() throws Exception {
+        
+        Recipe recipe = getDummyRecipe();
+        when(recipeService.getRecipeById(anyString())).thenReturn(Optional.of(recipe));
+        ResultActions response = mockMvc.perform(
+                get("/recipe/{id}","28c004e2-f2e7-4a48-90a9-cad60255fc"));
+        response.andExpect(status().isOk()).andDo(print());
+    }
+    
+    @DisplayName("get recipe by id return empty")
+    @Test
+    public void getRecipeById_Return_Empty() throws Exception {
+        
+        when(recipeService.getRecipeById(anyString())).thenReturn(Optional.empty());
+        ResultActions response = mockMvc.perform(
+                get("/recipe/{id}","100"));
+        response.andExpect(status().isNoContent()).andDo(print());
+    }
+    
     private Recipe getDummyRecipe() {
         
         Recipe recipe =new Recipe();
@@ -152,6 +174,7 @@ public class RecipeControllerTests {
         recipe.setName("chicken curry");
         recipe.setDescription("description");
         recipe.setInstruction("instruction");
+        recipe.setIsVegetarian("No");
         recipe.setServings(100);
         recipe.setIngredients(ingredients);
         
@@ -163,17 +186,18 @@ public class RecipeControllerTests {
         Recipe recipe =new Recipe();
         Set<Ingredient> ingredients = new HashSet<>();
         
-        Ingredient in1 = getIngredient("Lamb curry");
-        Ingredient in2 = getIngredient("OIL");
+        Ingredient in1 = getIngredient("Paneer");
+        Ingredient in2 = getIngredient("Oil");
         Ingredient in3 = getIngredient("Chilli");
         Ingredient in4 = getIngredient("Potatoes");
         ingredients.addAll(Arrays.asList(in1,in2,in3,in4));
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fddc");
-        recipe.setName("Lamb curry");
-        recipe.setDescription("Lamb curry");
-        recipe.setInstruction("Lamb curry");
+        recipe.setName("Paneer");
+        recipe.setDescription("Paneer curry");
+        recipe.setInstruction("Paneer curry");
         recipe.setServings(10);
+        recipe.setIsVegetarian("Yes");
         recipe.setIngredients(ingredients);
         
         return recipe;

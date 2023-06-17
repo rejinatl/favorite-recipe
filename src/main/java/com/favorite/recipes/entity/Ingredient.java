@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "ingredient")
-public class Ingredient extends Base {
+public final class Ingredient extends Base {
 
     private static final long serialVersionUID = 1L;
 

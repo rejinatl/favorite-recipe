@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
@@ -92,6 +93,20 @@ public class RecipeServiceTests {
 
         assertThat(recipesFromDB).isEmpty();
         
+    }
+    
+    @DisplayName("Return a Recipe by its ID")
+    @Test
+    public void getRecipeById_Return_Ok() throws Exception {
+
+        Recipe recipe = getDummyRecipe();
+
+        when(recipeRepository.findById(anyString())).thenReturn(Optional.of(recipe));
+
+        Optional<Recipe> recipeOptional = recipeRepository.findById("28c004e2-f2e7-4a48-90a9-cad60255fc");
+
+        assertThat(recipeOptional).isNotNull();
+
     }
     
     @DisplayName("updateRecipe and return Recipe")

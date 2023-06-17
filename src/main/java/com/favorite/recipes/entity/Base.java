@@ -21,7 +21,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @JsonIgnoreProperties({ "createdDate", "updatedDate" })
-public class Base implements Serializable {
+public sealed class Base implements Serializable permits Ingredient, Recipe {
 
     private static final long serialVersionUID = 1L;
 

@@ -66,12 +66,25 @@ public interface RecipeController {
              @RequestParam(required = false) String instructionContains
              );
     
+    /** Get a Recipe by specifying its id. **/
+    @Operation(summary = "${recipe.controller.find.recipe.by.id}", description = "${recipe.controller.find.recipe.by.id.desc}")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "${recipe.controller.successful.operation}", content = {
+                    @Content(schema = @Schema(implementation = Recipe.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "204", description = "${recipe.controller.no.data.found}", content = {
+                    @Content(schema = @Schema()) }),
+            @ApiResponse(responseCode = "500", description = "${recipe.controller.application.error}", content = {
+                    @Content(schema = @Schema()) }) })
+    @GetMapping("/recipe/{id}")
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable("id") String id);
     
     /** Update recipe */
     @Operation(summary = "${recipe.controller.update.recipe}", description = "${recipe.controller.update.recipe.desc}")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "${recipe.controller.successful.operation}", content = {
                     @Content(schema = @Schema(implementation = Recipe.class), mediaType = "application/json") }),
+            @ApiResponse(responseCode = "204", description = "${recipe.controller.no.data.found}", content = {
+                    @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "400", description = "${recipe.controller.mandatory.fields}", content = {
                     @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "404", description = "${recipe.controller.unknown.data.error}", content = {
@@ -91,7 +104,7 @@ public interface RecipeController {
                     @Content(schema = @Schema()) }),
             @ApiResponse(responseCode = "404", description = "${recipe.controller.unknown.data.error}", content = {
                     @Content(schema = @Schema()) }),
-            @ApiResponse(responseCode = "500", description = "${Application error}", content = {
+            @ApiResponse(responseCode = "500", description = "${recipe.controller.application.error}", content = {
                     @Content(schema = @Schema()) }) })
     @DeleteMapping("/recipe/{id}")
     public ResponseEntity<HttpStatus> deleteRecipe(@PathVariable("id") String id);
