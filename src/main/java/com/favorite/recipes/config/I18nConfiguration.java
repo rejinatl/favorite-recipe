@@ -22,12 +22,11 @@ public class I18nConfiguration {
       return resourceBundleMessageSource;
     }
 
-
     @Bean
     public LocaleResolver localeResolver() {
       SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
       sessionLocaleResolver.setDefaultLocale(Locale.US);
       return sessionLocaleResolver;
     }
-
 }
+
