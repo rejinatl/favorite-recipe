@@ -2,6 +2,7 @@ package com.favorite.recipes.service.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -12,12 +13,13 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -38,7 +40,7 @@ public class RecipeRepositoryTests {
     @Autowired
     TestEntityManager entityManager;
     
-    @MockBean
+    @Mock
     RecipeSearchSpecification recipeSearchSpecification;
     
     @BeforeEach
@@ -59,12 +61,11 @@ public class RecipeRepositoryTests {
         String excludeIngredient = "butter";
         String instructionContains = "instruction";
         
-        List<Recipe> filterResult = recipeRepository.findAll(recipeSearchSpecification.searchRecipe(isVegetarian, 
+        List<Recipe> filterResult = recipeRepository.findAll(Specification.where(recipeSearchSpecification.searchRecipe(isVegetarian, 
                 servings, includeIngredient, 
-                excludeIngredient, instructionContains));
+                excludeIngredient, instructionContains)));
         
         assertEquals(1, filterResult.size());
-        
     }
 
     @DisplayName("Recipe Repository - Find recipe by ID")
@@ -73,6 +74,15 @@ public class RecipeRepositoryTests {
 
         Recipe recipe = recipeRepository.findById("28c004e2-f2e7-4a48-90a9-cad60255fcad").get();
         assertEquals("chicken curry", recipe.getName());
+    }
+    
+    @DisplayName("recipe already present or not")
+    @Test
+    public void check_RecipeAlreadyPresent() {
+        
+        String recipe = "chicken curry";
+        assertTrue(recipeRepository.existsByNameIgnoreCase(recipe)); 
+        
     }
     
     @DisplayName("Recipe Repository - findById")

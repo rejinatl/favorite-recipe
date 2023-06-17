@@ -67,6 +67,11 @@ public class RecipeControllerTests {
         
     }
     
+    /**
+     * response.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
+     * @throws Exception
+     */
+    
     @Test
     @DisplayName("Update recipe")
     public void update_Recipe_and_Return_OK() throws Exception {

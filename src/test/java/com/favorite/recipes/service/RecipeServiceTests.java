@@ -3,6 +3,7 @@ package com.favorite.recipes.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -30,6 +31,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import com.favorite.recipes.entity.Ingredient;
 import com.favorite.recipes.entity.Recipe;
+import com.favorite.recipes.exception.DuplicateRecordErrorException;
 import com.favorite.recipes.exception.ResourceNotFoundException;
 import com.favorite.recipes.repository.RecipeRepository;
 import com.favorite.recipes.service.impl.RecipeServiceImpl;
@@ -38,7 +40,6 @@ import com.favorite.recipes.utils.RecipeSearchSpecification;
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class RecipeServiceTests {
-    
     
     @Mock
     RecipeRepository recipeRepository;
@@ -61,6 +62,16 @@ public class RecipeServiceTests {
         
     }
     
+    @DisplayName("create recipe - name already present return DuplicateRecordErrorException")
+    @Test
+    public void createRecipe_Return_DuplicateRecordErrorException() throws Exception {
+        
+        when(recipeRepository.existsByNameIgnoreCase(anyString())).thenReturn(true);
+        Recipe recipe = getDummyRecipe();
+        assertThrows(DuplicateRecordErrorException.class, ()-> recipeService.createRecipe(recipe));
+        
+    }
+    
     @DisplayName("getRecipe with return collection of recipe")
     @Test
     public void getRecipe_Return_Recipt_List() throws Exception {
@@ -70,9 +81,24 @@ public class RecipeServiceTests {
         Recipe recipe1 = getDummyRecipe();
         Recipe recipe2 = getDummyRecipe2();
         recipes.addAll(Arrays.asList(recipe1,recipe2));
+        
         when(recipeRepository.findAll(any(Specification.class))).thenReturn(recipes);
 
         List<Recipe> recipesFromDB = recipeService.getRecipe("no", 10,"chicken", "butter","instruction");
+
+        assertThat(recipesFromDB).isNotNull();
+        
+    }
+    
+    @DisplayName("GetRecipe by specfying ID")
+    @Test
+    public void getRecipeById_Return_Recipt() throws Exception {
+        
+        Recipe recipe = getDummyRecipe();
+        
+        when(recipeRepository.findById(anyString())).thenReturn(Optional.of(recipe));
+
+        Optional<Recipe> recipesFromDB = recipeService.getRecipeById("28c004e2-f2e7-4a48-90a9-cad60255fcad");
 
         assertThat(recipesFromDB).isNotNull();
         
