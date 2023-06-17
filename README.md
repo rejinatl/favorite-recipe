@@ -6,8 +6,8 @@ This application allow users to manage their favorite recipes by creating,fetchi
 User can also fiter their recipes based on the following criteria,
 1. Whether the recipe is a Vegitarian or not by providing the search text as "yes" or "no".
 2. Number of servings
-3. Specific ingredients to include
-4. Specific ingredients in exclude
+3. Specific ingredient to include
+4. Specific ingredient in exclude
 5. Search a text in the instructions
 
 # Minimal setup for the application
@@ -38,6 +38,7 @@ The project is created with Maven, so you just need to import it to your IDE and
 ## Running Tests
 
 1.Run the junit test by using the command : `mvn test`
+
 2. Navigate to the Jacoco folder and open ```target/site/jacoco/index.html```
 3. ```index.html``` will list the coverage for the complete Project
 
