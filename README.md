@@ -61,7 +61,7 @@ Open your command prompt and run the project by using the command : `mvn clean s
 
 Open your browser with the URL below:
 
-`http://localhost:8090/api/v1/swagger-ui/index.html`
+`http://localhost:8086/api/v1/swagger-ui/index.html`
 
 All the API end points are documented in the controller and are self explanatory. Following are snapshot of the APIs created.
 
