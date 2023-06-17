@@ -52,9 +52,8 @@ public class RecipeControllerTests {
     @Autowired
     ObjectMapper objectMapper;
     
-    
-    @Test
     @DisplayName("Create a Recipe")
+    @Test
     public void createRecipe_ReturnCreated() throws Exception {
         
         Recipe recipe = getDummyRecipe();
@@ -67,13 +66,8 @@ public class RecipeControllerTests {
         
     }
     
-    /**
-     * response.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException))
-     * @throws Exception
-     */
-    
-    @Test
     @DisplayName("Update recipe")
+    @Test
     public void update_Recipe_and_Return_OK() throws Exception {
         
         Recipe recipe = getDummyRecipe();
@@ -98,8 +92,8 @@ public class RecipeControllerTests {
         
     }
     
-    @Test
     @DisplayName("Delete a recipe return_OK")
+    @Test
     public void deleteRecipe_Return_OK() throws Exception {
         
         when(recipeService.deleteRecipe(any())).thenReturn(true);
@@ -110,8 +104,8 @@ public class RecipeControllerTests {
 
     }
     
-    @Test
     @DisplayName("Delete a recipe return_NO_CONTENT")
+    @Test
     public void deleteRecipe_Return_NO_CONTENT() throws Exception {
         
         when(recipeService.deleteRecipe(any())).thenReturn(false);
@@ -170,7 +164,7 @@ public class RecipeControllerTests {
         Set<Ingredient> ingredients = new HashSet<>();
         
         Ingredient in1 = getIngredient("Chicken");
-        Ingredient in2 = getIngredient("OIL");
+        Ingredient in2 = getIngredient("Oil");
         Ingredient in3 = getIngredient("Chilli");
         Ingredient in4 = getIngredient("Potatoes");
         ingredients.addAll(Arrays.asList(in1,in2,in3,in4));

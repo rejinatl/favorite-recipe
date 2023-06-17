@@ -51,7 +51,7 @@ public class RecipeRepositoryTests {
 
     }
     
-    @DisplayName("findAll")
+    @DisplayName("findAll_With_Search_Criteria")
     @Test
     public void findAll_With_Search_Criteria() throws Exception {
         
