@@ -84,7 +84,7 @@ public class RecipeServiceTests {
         
         when(recipeRepository.findAll(any(Specification.class))).thenReturn(recipes);
 
-        List<Recipe> recipesFromDB = recipeService.getRecipe("no", 10,"chicken", "butter","instruction");
+        List<Recipe> recipesFromDB = recipeService.getRecipe("No", 10,"chicken", "butter","instruction");
 
         assertThat(recipesFromDB).isNotNull();
         
@@ -115,7 +115,7 @@ public class RecipeServiceTests {
         recipes.addAll(Arrays.asList(recipe1,recipe2));
         when(recipeRepository.findAll()).thenReturn(Collections.emptyList());
 
-        List<Recipe> recipesFromDB = recipeService.getRecipe("yes", 10,"butter", "","");
+        List<Recipe> recipesFromDB = recipeService.getRecipe("Yes", 10,"butter", "","");
 
         assertThat(recipesFromDB).isEmpty();
         
@@ -206,14 +206,14 @@ public class RecipeServiceTests {
         Set<Ingredient> ingredients = new HashSet<>();
         
         Ingredient in1 = getIngredient("Chicken");
-        Ingredient in2 = getIngredient("OIL");
+        Ingredient in2 = getIngredient("Oil");
         Ingredient in3 = getIngredient("Chilli");
         Ingredient in4 = getIngredient("Potatoes");
         ingredients.addAll(Arrays.asList(in1,in2,in3,in4));
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fcad");
         recipe.setName("chicken curry");
-        recipe.setIsVegetarian("no");
+        recipe.setIsVegetarian("No");
         recipe.setDescription("description");
         recipe.setInstruction("instruction");
         recipe.setServings(100);
@@ -228,14 +228,14 @@ public class RecipeServiceTests {
         Set<Ingredient> ingredients = new HashSet<>();
         
         Ingredient in1 = getIngredient("Lamb curry");
-        Ingredient in2 = getIngredient("OIL");
+        Ingredient in2 = getIngredient("Oil");
         Ingredient in3 = getIngredient("Chilli");
         Ingredient in4 = getIngredient("Potatoes");
         ingredients.addAll(Arrays.asList(in1,in2,in3,in4));
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fddc");
         recipe.setName("Lamb curry");
-        recipe.setIsVegetarian("no");
+        recipe.setIsVegetarian("No");
         recipe.setDescription("Lamb curry");
         recipe.setInstruction("Lamb curry");
         recipe.setServings(10);

@@ -17,7 +17,7 @@ CREATE TABLE recipe (
   description varchar(255) DEFAULT NULL,
   servings int NOT NULL,
   instruction text NOT NULL,
-  is_vegetarian varchar(255) NOT NULL DEFAULT 'No',
+  is_vegetarian varchar(4) NOT NULL DEFAULT 'No',
   created_date datetime(6) NOT NULL,
   updated_date datetime(6) NOT NULL,
   PRIMARY KEY (id)

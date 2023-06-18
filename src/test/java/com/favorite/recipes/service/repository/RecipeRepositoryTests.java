@@ -55,7 +55,7 @@ public class RecipeRepositoryTests {
     @Test
     public void findAll_With_Search_Criteria() throws Exception {
         
-        String isVegetarian = "no";
+        String isVegetarian = "No";
         Integer servings = 10;
         String includeIngredient = "Chicken";
         String excludeIngredient = "butter";
@@ -116,14 +116,14 @@ private Recipe getDummyRecipe() {
         Set<Ingredient> ingredients = new HashSet<>();
         
         Ingredient in1 = getIngredient("Chicken");
-        Ingredient in2 = getIngredient("OIL");
+        Ingredient in2 = getIngredient("Oil");
         Ingredient in3 = getIngredient("Chilli");
         Ingredient in4 = getIngredient("Potatoes");
         ingredients.addAll(Arrays.asList(in1,in2,in3,in4));
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fcad");
         recipe.setName("chicken curry");
-        recipe.setIsVegetarian("no");
+        recipe.setIsVegetarian("No");
         recipe.setDescription("description");
         recipe.setInstruction("instruction");
         recipe.setServings(100);
@@ -138,14 +138,14 @@ private Recipe getDummyRecipe2() {
         Set<Ingredient> ingredients = new HashSet<>();
         
         Ingredient in1 = getIngredient("Lamb curry");
-        Ingredient in2 = getIngredient("OIL");
+        Ingredient in2 = getIngredient("Oil");
         Ingredient in3 = getIngredient("Chilli");
         Ingredient in4 = getIngredient("Potatoes");
         ingredients.addAll(Arrays.asList(in1,in2,in3,in4));
         
         recipe.setId("28c004e2-f2e7-4a48-90a9-cad60255fddc");
         recipe.setName("Lamb curry");
-        recipe.setIsVegetarian("no");
+        recipe.setIsVegetarian("No");
         recipe.setDescription("Lamb curry");
         recipe.setInstruction("Lamb curry");
         recipe.setServings(10);
