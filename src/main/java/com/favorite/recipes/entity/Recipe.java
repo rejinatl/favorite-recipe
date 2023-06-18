@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,6 +61,7 @@ public final class Recipe extends Base {
 
     @Column(name = "is_vegetarian")
     @NotBlank(message = "{ingredient.vegetarian.notempty}")
+    @Pattern(regexp = "Yes|No", flags = Pattern.Flag.CANON_EQ, message = "{ingredient.vegetarian.option.error}")
     private String isVegetarian ;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
