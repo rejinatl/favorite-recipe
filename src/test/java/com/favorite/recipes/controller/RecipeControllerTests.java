@@ -144,7 +144,7 @@ public class RecipeControllerTests {
         Recipe recipe = getDummyRecipe();
         when(recipeService.getRecipeById(anyString())).thenReturn(Optional.of(recipe));
         ResultActions response = mockMvc.perform(
-                get("/recipe/{id}","28c004e2-f2e7-4a48-90a9-cad60255fc"));
+                get("/recipe/{id}","28c004e2-f2e7-4a48-90a9-cad60255fcad"));
         response.andExpect(status().isOk()).andDo(print());
     }
     
